@@ -4,7 +4,7 @@
         {
             "name": "xingzhi-cube-2.0tft-combine-wifi",
             "sdkconfig_append": [
-                "CONFIG_PARTITION_TABLE_CUSTOM_FILENAME=\"partitions/v2/partitions_combine.csv\""
+                "CONFIG_PARTITION_TABLE_CUSTOM_FILENAME=\"partitions/v1/partitions_combine.csv\""
             ]
         }
     ]

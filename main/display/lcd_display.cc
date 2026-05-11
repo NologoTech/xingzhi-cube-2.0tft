@@ -41,6 +41,10 @@ void LcdDisplay::InitializeLcdThemes() {
     light_theme->set_text_font(text_font);
     light_theme->set_icon_font(icon_font);
     light_theme->set_large_icon_font(large_icon_font);
+    #if CONFIG_BOARD_TYPE_XINGZHI_Cube_2_0TFT_COMBINE_WIFI
+    auto default_emoji_collection = std::make_shared<Twemoji64>();
+    light_theme->set_emoji_collection(default_emoji_collection);
+    #endif
 
     // dark theme
     auto dark_theme = new LvglTheme("dark");
@@ -56,7 +60,10 @@ void LcdDisplay::InitializeLcdThemes() {
     dark_theme->set_text_font(text_font);
     dark_theme->set_icon_font(icon_font);
     dark_theme->set_large_icon_font(large_icon_font);
-
+    #if CONFIG_BOARD_TYPE_XINGZHI_Cube_2_0TFT_COMBINE_WIFI
+    dark_theme->set_emoji_collection(default_emoji_collection);
+    #endif
+    
     auto& theme_manager = LvglThemeManager::GetInstance();
     theme_manager.RegisterTheme("light", light_theme);
     theme_manager.RegisterTheme("dark", dark_theme);
@@ -807,11 +814,7 @@ void LcdDisplay::SetupUI() {
     lv_obj_set_style_border_width(emoji_box_, 0, 0);
 
     emoji_label_ = lv_label_create(emoji_box_);
-    #if CONFIG_BOARD_TYPE_XINGZHI_Cube_2_0TFT_COMBINE_WIFI
-    lv_obj_set_style_text_font(emoji_label_, &font_awesome_30_4, 0);
-    #else
     lv_obj_set_style_text_font(emoji_label_, large_icon_font, 0);
-    #endif
 
     lv_obj_set_style_text_color(emoji_label_, lvgl_theme->text_color(), 0);
     lv_label_set_text(emoji_label_, FONT_AWESOME_MICROCHIP_AI);
@@ -940,6 +943,15 @@ void LcdDisplay::SetEmotion(const char* emotion) {
         const char* utf8 = font_awesome_get_utf8(emotion);
         if (utf8 != nullptr && emoji_label_ != nullptr) {
             DisplayLockGuard lock(this);
+            #if CONFIG_BOARD_TYPE_XINGZHI_Cube_2_0TFT_COMBINE_WIFI
+            auto lvgl_theme = static_cast<LvglTheme*>(current_theme_);
+            if (lvgl_theme != nullptr) {
+                auto lf = lvgl_theme->large_icon_font();
+                if (lf != nullptr) {
+                    lv_obj_set_style_text_font(emoji_label_, lf->font(), 0);
+                }
+            }
+            #endif
             lv_label_set_text(emoji_label_, utf8);
             lv_obj_add_flag(emoji_image_, LV_OBJ_FLAG_HIDDEN);
             lv_obj_remove_flag(emoji_label_, LV_OBJ_FLAG_HIDDEN);
