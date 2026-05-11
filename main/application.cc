@@ -74,6 +74,10 @@ void Application::CheckAssetsVersion() {
     auto display = board.GetDisplay();
     auto& assets = Assets::GetInstance();
 
+#if (CONFIG_BOARD_TYPE_XINGZHI_Cube_2_0TFT_COMBINE_WIFI)
+    GetAudioService().SetModelsList(esp_srmodel_init("model"));
+#endif
+
     if (!assets.partition_valid()) {
         ESP_LOGW(TAG, "Assets partition is disabled for board %s", BOARD_NAME);
         return;

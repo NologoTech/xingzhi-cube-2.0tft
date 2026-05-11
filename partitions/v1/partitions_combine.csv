@@ -7,3 +7,4 @@ model,    data, spiffs,  0x10000,   0xF0000,
 ota_0,    app,  ota_0,   0x100000,  6M,
 ota_1,    app,  ota_1,   0x700000,  0x240000,
 ota_2,    app,  ota_2,   0x940000,  0x240000,
+assets,     data,   spiffs,     0xc00000,     3M

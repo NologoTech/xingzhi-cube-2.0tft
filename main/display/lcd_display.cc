@@ -20,6 +20,7 @@
 LV_FONT_DECLARE(BUILTIN_TEXT_FONT);
 LV_FONT_DECLARE(BUILTIN_ICON_FONT);
 LV_FONT_DECLARE(font_awesome_30_4);
+LV_FONT_DECLARE(font_puhui_20_4);
 
 void LcdDisplay::InitializeLcdThemes() {
     auto text_font = std::make_shared<LvglBuiltInFont>(&BUILTIN_TEXT_FONT);
@@ -768,6 +769,9 @@ void LcdDisplay::SetupUI() {
     lv_obj_set_style_pad_row(container_, 0, 0);
     lv_obj_set_style_bg_color(container_, lvgl_theme->background_color(), 0);
     lv_obj_set_style_border_color(container_, lvgl_theme->border_color(), 0);
+    #if CONFIG_BOARD_TYPE_XINGZHI_Cube_2_0TFT_COMBINE_WIFI
+    lv_obj_set_style_text_font(container_, &font_puhui_20_4, 0);
+    #endif
 
     /* Status bar */
     status_bar_ = lv_obj_create(container_);
@@ -803,7 +807,12 @@ void LcdDisplay::SetupUI() {
     lv_obj_set_style_border_width(emoji_box_, 0, 0);
 
     emoji_label_ = lv_label_create(emoji_box_);
+    #if CONFIG_BOARD_TYPE_XINGZHI_Cube_2_0TFT_COMBINE_WIFI
+    lv_obj_set_style_text_font(emoji_label_, &font_awesome_30_4, 0);
+    #else
     lv_obj_set_style_text_font(emoji_label_, large_icon_font, 0);
+    #endif
+
     lv_obj_set_style_text_color(emoji_label_, lvgl_theme->text_color(), 0);
     lv_label_set_text(emoji_label_, FONT_AWESOME_MICROCHIP_AI);
 
