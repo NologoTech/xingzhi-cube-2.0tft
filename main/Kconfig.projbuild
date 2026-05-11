@@ -326,6 +326,10 @@ choice BOARD_TYPE
     config BOARD_TYPE_XINGZHI_Cube_2_0TFT_4G
         bool "无名科技星智2.0(4G)"
         depends on IDF_TARGET_ESP32S3
+    config BOARD_TYPE_XINGZHI_Cube_2_0TFT_COMBINE_WIFI
+        bool "无名科技星智2.0 三合一(WIFI)"
+        select DISABLE_OTA_UPGRADE
+        depends on IDF_TARGET_ESP32S3
     config BOARD_TYPE_SENSECAP_WATCHER
         bool "SenseCAP Watcher"
         depends on IDF_TARGET_ESP32S3
@@ -629,5 +633,12 @@ menu TAIJIPAI_S3_CONFIG
     help
         启动双声道
 endmenu
+
+config DISABLE_OTA_UPGRADE
+    bool "禁用ota升级"
+    default n  
+    depends on BOARD_TYPE_XINGZHI_Cube_2_0TFT_COMBINE_WIFI    
+    help
+        禁用ota升级 检测到新版本时也不会进行升级
 
 endmenu

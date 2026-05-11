@@ -231,6 +231,12 @@ bool Ota::CheckVersion() {
             if (cJSON_IsNumber(force) && force->valueint == 1) {
                 has_new_version_ = true;
             }
+            // 检查 OTA 是否禁用,为真时表示禁用，此时返回true，表示当前版本为最新版本。
+            // 为假时表示不禁用，此时继续执行检测新版本逻辑
+            if (is_ota_disabled_) {
+                has_new_version_  = false;
+                ESP_LOGI(TAG, "OTA upgrade is disabled, skipping upgrade firmware.");
+            }
         }
     } else {
         ESP_LOGW(TAG, "No firmware section found!");
@@ -238,6 +244,30 @@ bool Ota::CheckVersion() {
 
     cJSON_Delete(root);
     return true;
+}
+
+// 3.新增系统切换相关代码
+void Ota::switchfirmware() {
+    ESP_LOGI(TAG, "switch firmware !");
+    auto switch_partition = esp_ota_get_next_update_partition(NULL);
+    if (switch_partition == NULL) {
+        ESP_LOGE(TAG, "Failed to get switch partition");
+        return;
+    }
+
+    // 打印分区详细信息
+    ESP_LOGI(TAG, "Switch partition label: %s", switch_partition->label);
+    ESP_LOGI(TAG, "Switch partition address: 0x%lx", switch_partition->address);
+
+    esp_err_t err = esp_ota_set_boot_partition(switch_partition);
+    if (err != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to set boot partition: %s", esp_err_to_name(err));
+        return;
+    }
+
+    ESP_LOGI(TAG, "Firmware switch successful, rebooting in 3 seconds...");
+    vTaskDelay(pdMS_TO_TICKS(3000));
+    esp_restart();
 }
 
 void Ota::MarkCurrentVersionValid() {

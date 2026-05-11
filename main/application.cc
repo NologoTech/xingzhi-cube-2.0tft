@@ -163,7 +163,10 @@ void Application::CheckNewVersion(Ota& ota) {
         }
 
         // No new version, mark the current version as valid
+        // 三合一固件不在此处进行固件有效检验
+#if (!CONFIG_BOARD_TYPE_XINGZHI_Cube_2_0TFT_COMBINE_WIFI)
         ota.MarkCurrentVersionValid();
+#endif
         if (!ota.HasActivationCode() && !ota.HasActivationChallenge()) {
             xEventGroupSetBits(event_group_, MAIN_EVENT_CHECK_NEW_VERSION_DONE);
             // Exit the loop if done checking new version

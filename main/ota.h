@@ -31,6 +31,14 @@ public:
     const std::string& GetActivationCode() const { return activation_code_; }
     std::string GetCheckVersionUrl();
 
+    // 1.新增系统切换相关代码
+#ifdef CONFIG_DISABLE_OTA_UPGRADE
+    bool is_ota_disabled_ = CONFIG_DISABLE_OTA_UPGRADE;
+#else
+    bool is_ota_disabled_ = false;
+#endif
+    void switchfirmware();
+
 private:
     std::string activation_message_;
     std::string activation_code_;

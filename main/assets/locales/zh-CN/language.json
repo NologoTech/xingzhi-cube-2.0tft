@@ -50,6 +50,9 @@
         "LOADING_ASSETS": "加载资源...",
         "PLEASE_WAIT": "请稍候...",
         "FOUND_NEW_ASSETS": "发现新资源: %s",
-        "HELLO_MY_FRIEND": "你好，我的朋友！"
+        "HELLO_MY_FRIEND": "你好，我的朋友！",
+        "SWITCH_SYSTEMS":"将在3s后切换系统",
+        "SHUT_DOWN":"将在3s后关机",
+        "SWITCH_SYSTEMS_BEFORE":"切换系统前，请先联网"
     }
 }
