@@ -76,52 +76,52 @@ private:
     }
 
     void PowrSwitch() {
-        if (is_first_boot == true && shutedup == false) {
-            int usb_adc_value0;
-            ESP_ERROR_CHECK(adc_oneshot_read(adc_handle_, POWER_USBIN_ADC_CHANNEL, &usb_adc_value0));
-            is_usb_inserted_on_boot = (1500 < usb_adc_value0 && usb_adc_value0 < 4000 );
-            ESP_LOGI("powercontrol", "USB ADC VALUE 0: %d", usb_adc_value0);
-            shutedup = true;
-        }
         Volumecontrol(); // 音量调节
-        PowerDec_level_ = gpio_get_level(Power_Dec);
+        // if (is_first_boot == true && shutedup == false) {
+        //     int usb_adc_value0;
+        //     ESP_ERROR_CHECK(adc_oneshot_read(adc_handle_, POWER_USBIN_ADC_CHANNEL, &usb_adc_value0));
+        //     is_usb_inserted_on_boot = (1500 < usb_adc_value0 && usb_adc_value0 < 4000 );
+        //     ESP_LOGI("powercontrol", "USB ADC VALUE 0: %d", usb_adc_value0);
+        //     shutedup = true;
+        // }
+        // PowerDec_level_ = gpio_get_level(Power_Dec);
 
-        if (PowerDec_level_ == 1) {
-            is_first_boot = false;
-        } 
+        // if (PowerDec_level_ == 1) {
+        //     is_first_boot = false;
+        // } 
 
-        if (!is_first_boot) {
-            PowerControl_ticks_++;
-            auto display = Board::GetInstance().GetDisplay();
-            if (PowerDec_level_ == 0 && pressed == false) {
-                press_ticks_ = PowerControl_ticks_;
-                pressed = true;
-            }
-            if (press_ticks_ != 0 && PowerControl_ticks_ - press_ticks_ == power_off_ticks_) {
-                display->SetStatus(Lang::Strings::SHUT_DOWN);
-                if (timer_handle_) {
-                    esp_timer_stop(timer_handle_);
-                    esp_timer_delete(timer_handle_);
-                }
-                gpio_set_level(DISPLAY_RES, 0);//屏幕复位
-                ESP_LOGI("powercontrol", "shut down...");
-                gpio_set_level(Power_Control, 0);
-            }
-            if (PowerDec_level_ == 1 && press_ticks_!= 0) {
-                PowerDec_level_ = gpio_get_level(Power_Dec);
-                if (PowerDec_level_ == 1) {
-                    press_interval_ticks_ = PowerControl_ticks_ - press_ticks_;
-                    pressed = false;
-                    press_ticks_ = 0;
-                }
-            }
-            if (press_interval_ticks_ != 0) {
-                if (press_interval_ticks_ < power_off_ticks_) {
-                    ESP_LOGI("powercontrol", "Rebooting...");
-                    esp_restart();
-                } 
-            }
-        }
+        // if (!is_first_boot) {
+        //     PowerControl_ticks_++;
+        //     auto display = Board::GetInstance().GetDisplay();
+        //     if (PowerDec_level_ == 0 && pressed == false) {
+        //         press_ticks_ = PowerControl_ticks_;
+        //         pressed = true;
+        //     }
+        //     if (press_ticks_ != 0 && PowerControl_ticks_ - press_ticks_ == power_off_ticks_) {
+        //         display->SetStatus(Lang::Strings::SHUT_DOWN);
+        //         if (timer_handle_) {
+        //             esp_timer_stop(timer_handle_);
+        //             esp_timer_delete(timer_handle_);
+        //         }
+        //         gpio_set_level(DISPLAY_RES, 0);//屏幕复位
+        //         ESP_LOGI("powercontrol", "shut down...");
+        //         gpio_set_level(Power_Control, 0);
+        //     }
+        //     if (PowerDec_level_ == 1 && press_ticks_!= 0) {
+        //         PowerDec_level_ = gpio_get_level(Power_Dec);
+        //         if (PowerDec_level_ == 1) {
+        //             press_interval_ticks_ = PowerControl_ticks_ - press_ticks_;
+        //             pressed = false;
+        //             press_ticks_ = 0;
+        //         }
+        //     }
+        //     if (press_interval_ticks_ != 0) {
+        //         if (press_interval_ticks_ < power_off_ticks_) {
+        //             ESP_LOGI("powercontrol", "Rebooting...");
+        //             esp_restart();
+        //         } 
+        //     }
+        // }
     }
 
 

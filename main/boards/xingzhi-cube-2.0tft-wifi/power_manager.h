@@ -69,42 +69,42 @@ private:
 
     void PowrSwitch() {
         Volumecontrol(); // 音量调节
-        PowerDec_level_ = gpio_get_level(Power_Dec);
+        // PowerDec_level_ = gpio_get_level(Power_Dec);
 
-        if (PowerDec_level_ == 1) {
-            is_first_boot = false;
-        } 
+        // if (PowerDec_level_ == 1) {
+        //     is_first_boot = false;
+        // } 
 
-        if (!is_first_boot) {
-            PowerControl_ticks_++;
-            if (PowerDec_level_ == 0 && pressed == false) {
-                press_ticks_ = PowerControl_ticks_;
-                pressed = true;
-            }
-            if (press_ticks_ != 0 && PowerControl_ticks_ - press_ticks_ == power_off_ticks_) {
-                if (timer_handle_) {
-                    esp_timer_stop(timer_handle_);
-                    esp_timer_delete(timer_handle_);
-                }
-                gpio_set_level(DISPLAY_RES, 0);//屏幕复位
-                ESP_LOGI("powercontrol", "shut down...");
-                gpio_set_level(Power_Control, 0);
-            }
-            if (PowerDec_level_ == 1 && press_ticks_!= 0) {
-                PowerDec_level_ = gpio_get_level(Power_Dec);
-                if (PowerDec_level_ == 1) {
-                    press_interval_ticks_ = PowerControl_ticks_ - press_ticks_;
-                    pressed = false;
-                    press_ticks_ = 0;
-                }
-            }
-            if (press_interval_ticks_ != 0) {
-                if (press_interval_ticks_ < power_off_ticks_) {
-                    ESP_LOGI("powercontrol", "Rebooting...");
-                    esp_restart();
-                } 
-            }
-        }
+        // if (!is_first_boot) {
+        //     PowerControl_ticks_++;
+        //     if (PowerDec_level_ == 0 && pressed == false) {
+        //         press_ticks_ = PowerControl_ticks_;
+        //         pressed = true;
+        //     }
+        //     if (press_ticks_ != 0 && PowerControl_ticks_ - press_ticks_ == power_off_ticks_) {
+        //         if (timer_handle_) {
+        //             esp_timer_stop(timer_handle_);
+        //             esp_timer_delete(timer_handle_);
+        //         }
+        //         gpio_set_level(DISPLAY_RES, 0);//屏幕复位
+        //         ESP_LOGI("powercontrol", "shut down...");
+        //         gpio_set_level(Power_Control, 0);
+        //     }
+        //     if (PowerDec_level_ == 1 && press_ticks_!= 0) {
+        //         PowerDec_level_ = gpio_get_level(Power_Dec);
+        //         if (PowerDec_level_ == 1) {
+        //             press_interval_ticks_ = PowerControl_ticks_ - press_ticks_;
+        //             pressed = false;
+        //             press_ticks_ = 0;
+        //         }
+        //     }
+        //     if (press_interval_ticks_ != 0) {
+        //         if (press_interval_ticks_ < power_off_ticks_) {
+        //             ESP_LOGI("powercontrol", "Rebooting...");
+        //             esp_restart();
+        //         } 
+        //     }
+        // }
     }
 
 
